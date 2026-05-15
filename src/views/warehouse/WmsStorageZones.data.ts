@@ -18,15 +18,15 @@ export const columns: BasicColumn[] = [
    {
     title: '库区类型',
     align:"center",
-    dataIndex: 'zoneType'
+    dataIndex: 'zoneType_dictText'
    },
    {
-    title: '状态: 创建,禁用, 启用',
+    title: '状态',
     align:"center",
     dataIndex: 'status_dictText'
    },
    {
-    title: '是否可售库存 0-否, 1-是',
+    title: '是否可售库存',
     align:"center",
     dataIndex: 'isSellable_dictText'
    },
@@ -64,7 +64,10 @@ export const formSchema: FormSchema[] = [
   {
     label: '库区类型',
     field: 'zoneType',
-    component: 'Input',
+    component: 'JDictSelectTag',
+    componentProps:{
+      dictCode:"zone_type"
+    },
     dynamicRules: ({model,schema}) => {
           return [
                  { required: true, message: '请输入库区类型!'},
@@ -72,11 +75,11 @@ export const formSchema: FormSchema[] = [
      },
   },
   {
-    label: '状态: 创建,禁用, 启用',
+    label: '状态',
     field: 'status',
     component: 'JDictSelectTag',
     componentProps:{
-        dictCode:"dict_item_status"
+        dictCode:"wms_status"
      },
     dynamicRules: ({model,schema}) => {
           return [
@@ -85,7 +88,7 @@ export const formSchema: FormSchema[] = [
      },
   },
   {
-    label: '是否可售库存 0-否, 1-是',
+    label: '是否可售库存',
     field: 'isSellable',
     component: 'JDictSelectTag',
     componentProps:{
