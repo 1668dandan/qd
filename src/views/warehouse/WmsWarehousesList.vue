@@ -43,7 +43,7 @@
   import { useListPage } from '/@/hooks/system/useListPage'
   import WmsWarehousesModal from './components/WmsWarehousesModal.vue'
   import {columns, searchFormSchema, superQuerySchema} from './WmsWarehouses.data';
-  import {list, deleteOne, batchDelete, getImportUrl,getExportUrl} from './WmsWarehouses.api';
+  import {list, deleteOne, batchDelete, getImportUrl,getExportUrl,enable,disable} from './WmsWarehouses.api';
   import { downloadFile } from '/@/utils/common/renderUtils';
   import { useUserStore } from '/@/store/modules/user';
   const queryParam = reactive<any>({});
@@ -120,6 +120,18 @@
        showFooter: true,
      });
    }
+ /**
+ * 启用事件
+ */
+ async function handleEnable(record: Recordable) {
+   await enable({id: record.id}, handleSuccess);
+  }
+  /**
+  * 禁用事件
+  */
+  async function handleDisable(record: Recordable) {
+   await disable({id: record.id}, handleSuccess);
+   }
    /**
     * 详情
    */
@@ -140,7 +152,7 @@
     * 批量删除事件
     */
   async function batchHandleDelete() {
-     await batchDelete({ids: selectedRowKeys.value}, handleSuccess);
+     await batchDelete({id: selectedRowKeys.value}, handleSuccess);
    }
    /**
     * 成功回调
@@ -157,6 +169,16 @@
            label: '编辑',
            onClick: handleEdit.bind(null, record),
            auth: 'warehouse:wms_warehouses:edit'
+         },
+         {
+            label: '启用',
+            onClick: handleEnable.bind(null, record),
+
+         },
+         {
+           label: '禁用',
+           onClick: handleDisable.bind(null, record),
+
          }
        ]
    }
