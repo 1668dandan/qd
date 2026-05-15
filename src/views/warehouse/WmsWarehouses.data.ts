@@ -21,7 +21,7 @@ export const columns: BasicColumn[] = [
     dataIndex: 'warehouseAttr_dictText'
    },
    {
-    title: '状态: 创建,启动,禁用',
+    title: '状态',
     align:"center",
     dataIndex: 'status_dictText'
    },
@@ -69,7 +69,7 @@ export const formSchema: FormSchema[] = [
     field: 'status',
     component: 'JDictSelectTag',
     componentProps:{
-        dictCode:"dict_item_status"
+        dictCode:"wms_status"
      },
     dynamicRules: ({model,schema}) => {
           return [
