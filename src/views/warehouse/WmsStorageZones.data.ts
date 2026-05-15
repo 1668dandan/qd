@@ -33,7 +33,7 @@ export const columns: BasicColumn[] = [
    {
     title: '所属仓库',
     align:"center",
-    dataIndex: 'warehouseId'
+    dataIndex: 'warehouseName'
    },
 ];
 //查询数据
@@ -102,7 +102,7 @@ export const formSchema: FormSchema[] = [
   },
   {
     label: '所属仓库',
-    field: 'warehouseId',
+    field: 'warehouseName',
     component: 'Input',
     dynamicRules: ({model,schema}) => {
           return [
