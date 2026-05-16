@@ -3,6 +3,7 @@ import {FormSchema} from '/@/components/Table';
 import { rules} from '/@/utils/helper/validator';
 import { render } from '/@/utils/common/renderUtils';
 import { getWeekMonthQuarterYear } from '/@/utils';
+import {list} from './WmsStorageZones.api'
 //列表数据
 export const columns: BasicColumn[] = [
    {
@@ -38,6 +39,25 @@ export const columns: BasicColumn[] = [
 ];
 //查询数据
 export const searchFormSchema: FormSchema[] = [
+  {
+    label: '所属仓库',                  // 表单项左侧显示的标签文字
+    field: 'warehouseId',               // 表单字段名（对应后端 WmsStorageZones 实体的 warehouseId 属性）
+    component: 'ApiSelect',             // 使用 ApiSelect 组件：通过调用接口获取下拉选项数据
+    componentProps: {
+      // ===== 以下 4 个属性是 ApiSelect 组件的核心配置 =====
+      api: list,                        // 数据源接口：调用哪个 API 获取下拉列表数据
+                                        // 这里的 list 是 WmsWarehouses.api.ts 中导出的列表接口方法
+      resultField: 'records',           // 结果字段：接口返回的数据结构中，数组数据在哪个字段里
+                                        // 例如接口返回 { code: 200, result: { records: [...] } }，则取 records 字段
+      labelField: 'warehouseName',      // 显示字段：下拉框中展示给用户看的文本字段
+                                        // 用户看到的是仓库名称，如 "北京一号仓"
+      valueField: 'warehouseId',                 // 值字段：选中后实际提交给后端的字段值
+                                        // 提交的是仓库ID（数字），如 123456
+    },
+    colProps: {
+      span: 12,                         // 栅格布局：占 12 列（Ant Design 24 栅格系统，占一半宽度）
+    },
+  }
 ];
 //表单数据
 export const formSchema: FormSchema[] = [
