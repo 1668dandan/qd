@@ -43,7 +43,7 @@
   import { useListPage } from '/@/hooks/system/useListPage'
   import WmsStorageZonesModal from './components/WmsStorageZonesModal.vue'
   import {columns, searchFormSchema, superQuerySchema} from './WmsStorageZones.data';
-  import {list, deleteOne, batchDelete, getImportUrl,getExportUrl} from './WmsStorageZones.api';
+  import {list, deleteOne, batchDelete, getImportUrl,getExportUrl,enable,disable} from './WmsStorageZones.api';
   import { downloadFile } from '/@/utils/common/renderUtils';
   import { useUserStore } from '/@/store/modules/user';
   const queryParam = reactive<any>({});
@@ -120,6 +120,7 @@
        showFooter: true,
      });
    }
+
    /**
     * 详情
    */
@@ -130,6 +131,19 @@
        showFooter: false,
      });
    }
+   /**
+   * 启用事件
+   */
+   async function handleEnable(record: Recordable) {
+
+     await enable({id: record.id}, handleSuccess);
+    }
+    /**
+    * 禁用事件
+    */
+    async function handleDisable(record: Recordable) {
+     await disable({id: record.id}, handleSuccess);
+     }
    /**
     * 删除事件
     */
@@ -157,6 +171,14 @@
            label: '编辑',
            onClick: handleEdit.bind(null, record),
            auth: 'warehouse:wms_storage_zones:edit'
+         },
+         {
+          label: "禁用",
+          onClick: handleDisable.bind(null,record),
+         },
+         {
+          label: "启用",
+          onClick: handleEnable.bind(null,record),
          }
        ]
    }
