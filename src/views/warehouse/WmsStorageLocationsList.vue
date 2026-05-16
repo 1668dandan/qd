@@ -43,7 +43,7 @@
   import { useListPage } from '/@/hooks/system/useListPage'
   import WmsStorageLocationsModal from './components/WmsStorageLocationsModal.vue'
   import {columns, searchFormSchema, superQuerySchema} from './WmsStorageLocations.data';
-  import {list, deleteOne, batchDelete, getImportUrl,getExportUrl} from './WmsStorageLocations.api';
+  import {list, deleteOne, batchDelete, getImportUrl,getExportUrl,enable,disable} from './WmsStorageLocations.api';
   import { downloadFile } from '/@/utils/common/renderUtils';
   import { useUserStore } from '/@/store/modules/user';
   const queryParam = reactive<any>({});
@@ -69,7 +69,7 @@
               ],
             },
            actionColumn: {
-               width: 120,
+               width: 200,
                fixed:'right'
             },
             beforeFetch: (params) => {
@@ -131,6 +131,18 @@
      });
    }
    /**
+    * 启用事件
+    */
+   async function handleEnable(record: Recordable) {
+     await enable({id: record.id}, handleSuccess);
+   }
+   /**
+    * 禁用事件
+    */
+   async function handleDisable(record: Recordable) {
+     await disable({id: record.id}, handleSuccess);
+   }
+   /**
     * 删除事件
     */
   async function handleDelete(record) {
@@ -157,9 +169,21 @@
            label: '编辑',
            onClick: handleEdit.bind(null, record),
            auth: 'warehouse:wms_storage_locations:edit'
+         },
+         {
+           label: '禁用',
+           onClick: handleDisable.bind(null, record),
+           ifShow: record.status === 'ACTIVE',
+           auth: 'warehouse:wms_storage_locations:edit'
+         },
+         {
+           label: '启用',
+           onClick: handleEnable.bind(null, record),
+           ifShow: record.status !== 'ACTIVE',
+           auth: 'warehouse:wms_storage_locations:edit'
          }
        ]
-   }
+  }
      /**
         * 下拉操作栏
         */

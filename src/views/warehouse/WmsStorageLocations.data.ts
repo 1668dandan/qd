@@ -3,6 +3,8 @@ import {FormSchema} from '/@/components/Table';
 import { rules} from '/@/utils/helper/validator';
 import { render } from '/@/utils/common/renderUtils';
 import { getWeekMonthQuarterYear } from '/@/utils';
+import {list as warehouseList} from './WmsWarehouses.api';
+import {list as wareZoneList} from './WmsStorageZones.api'
 //列表数据
 export const columns: BasicColumn[] = [
    {
@@ -28,12 +30,12 @@ export const columns: BasicColumn[] = [
    {
     title: '所属仓库',
     align:"center",
-    dataIndex: 'warehouseId'
+    dataIndex: 'warehouseName'
    },
    {
     title: '所属库区',
     align:"center",
-    dataIndex: 'zoneId'
+    dataIndex: 'zoneName'
    },
    {
     title: '巷道',
@@ -81,8 +83,36 @@ export const columns: BasicColumn[] = [
     dataIndex: 'isSellable_dictText'
    },
 ];
-//查询数据
+//搜索表单
 export const searchFormSchema: FormSchema[] = [
+  {
+    label: '所属仓库',
+    field: 'warehouseId',               // 对应储位实体的 warehouseId
+    component: 'ApiSelect',
+    componentProps: {
+      api: warehouseList,               // 仓库列表接口（WmsWarehouses.api.ts 导出）
+      resultField: 'records',           // 分页数据在 result.records 中
+      labelField: 'warehouseName',      // 下拉框显示仓库名称
+      valueField: 'id',                 // 提交仓库主键 id
+    },
+    colProps: {
+      span: 6,                          // 占 6 列（1/4 宽度），一行可放 4 个筛选项
+    },
+  },
+  {
+    label: '所属库区',
+    field: 'zoneId',                    // 对应储位实体的 zoneId
+    component: 'ApiSelect',
+    componentProps: {
+      api: wareZoneList,                // 储区列表接口（WmsStorageZones.api.ts 导出）
+      resultField: 'records',           // 分页数据在 result.records 中
+      labelField: 'zoneName',           // 下拉框显示储区名称
+      valueField: 'id',                 // 提交储区主键 id
+    },
+    colProps: {
+      span: 6,                          // 占 6 列（1/4 宽度），与仓库筛选并排
+    },
+  }
 ];
 //表单数据
 export const formSchema: FormSchema[] = [
@@ -90,6 +120,8 @@ export const formSchema: FormSchema[] = [
     label: '库位编码',
     field: 'locationCode',
     component: 'Input',
+    // 启用状态下不允许修改
+    dynamicDisabled: ({model}) => model.status === 'ACTIVE',
     dynamicRules: ({model,schema}) => {
           return [
                  { required: true, message: '请输入库位编码!'},
@@ -99,10 +131,15 @@ export const formSchema: FormSchema[] = [
   {
     label: '储位类别',
     field: 'locationCategory',
-    component: 'Input',
+    component: 'JDictSelectTag',
+    componentProps: {
+      dictCode: 'location_category',
+    },
+    // 启用状态下不允许修改
+    dynamicDisabled: ({model}) => model.status === 'ACTIVE',
     dynamicRules: ({model,schema}) => {
           return [
-                 { required: true, message: '请输入储位类别!'},
+                 { required: true, message: '请选择储位类别!'},
           ];
      },
   },
@@ -113,43 +150,63 @@ export const formSchema: FormSchema[] = [
     componentProps:{
         dictCode:"location_type"
      },
+    // 启用状态下不允许修改
+    dynamicDisabled: ({model}) => model.status === 'ACTIVE',
     dynamicRules: ({model,schema}) => {
           return [
-                 { required: true, message: '请输入库位类型!'},
+                 { required: true, message: '请选择库位类型!'},
           ];
      },
   },
   {
     label: '状态',
     field: 'status',
-    defaultValue: "1",
+    defaultValue: "CREATED",
     component: 'JDictSelectTag',
     componentProps:{
         dictCode:"dict_item_status"
      },
+    // 启用状态下不允许修改
+    dynamicDisabled: ({model}) => model.status === 'ACTIVE',
     dynamicRules: ({model,schema}) => {
           return [
-                 { required: true, message: '请输入状态!'},
+                 { required: true, message: '请选择状态!'},
           ];
      },
   },
   {
     label: '所属仓库',
     field: 'warehouseId',
-    component: 'Input',
+    component: 'ApiSelect',
+    componentProps: {
+      api: warehouseList,               // 仓库列表接口
+      resultField: 'records',           // 分页数据在 result.records 中
+      labelField: 'warehouseName',      // 下拉框显示仓库名称
+      valueField: 'id',                 // 提交仓库主键 id
+    },
+    // 启用状态下不允许修改
+    dynamicDisabled: ({model}) => model.status === 'ACTIVE',
     dynamicRules: ({model,schema}) => {
           return [
-                 { required: true, message: '请输入所属仓库!'},
+                 { required: true, message: '请选择所属仓库!'},
           ];
      },
   },
   {
     label: '所属库区',
     field: 'zoneId',
-    component: 'Input',
+    component: 'ApiSelect',
+    componentProps: {
+      api: wareZoneList,                // 储区列表接口
+      resultField: 'records',           // 分页数据在 result.records 中
+      labelField: 'zoneName',           // 下拉框显示储区名称
+      valueField: 'id',                 // 提交储区主键 id
+    },
+    // 启用状态下不允许修改
+    dynamicDisabled: ({model}) => model.status === 'ACTIVE',
     dynamicRules: ({model,schema}) => {
           return [
-                 { required: true, message: '请输入所属库区!'},
+                 { required: true, message: '请选择所属库区!'},
           ];
      },
   },
@@ -202,7 +259,7 @@ export const formSchema: FormSchema[] = [
      },
     dynamicRules: ({model,schema}) => {
           return [
-                 { required: true, message: '请输入是否可售!'},
+                 { required: true, message: '请选择是否可售!'},
           ];
      },
   },
