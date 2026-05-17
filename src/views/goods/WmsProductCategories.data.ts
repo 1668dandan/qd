@@ -13,10 +13,10 @@ export const columns: BasicColumn[] = [
    {
     title: '父节点',
     align: 'center',
-    dataIndex: 'parentId'
+    dataIndex: 'parentName'
    },
    {
-    title: '状态 0-未启用 1-启用',
+    title: '状态',
     align: 'center',
     dataIndex: 'status_dictText'
    },
@@ -58,7 +58,7 @@ export const formSchema: FormSchema[] = [
      },
   },
   {
-    label: '状态 0-未启用 1-启用',
+    label: '状态',
     field: 'status',
     defaultValue: "1",
     component: 'JDictSelectTag',
