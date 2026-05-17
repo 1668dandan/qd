@@ -28,6 +28,12 @@ export const columns: BasicColumn[] = [
 ];
 //查询数据
 export const searchFormSchema: FormSchema[] = [
+  {
+    label: '类别名称',
+    field: 'categoryName',
+    component: 'Input',
+    colProps: { span: 8 },
+  },
 ];
 //表单数据
 export const formSchema: FormSchema[] = [
