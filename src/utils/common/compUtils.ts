@@ -14,6 +14,8 @@ import { useI18n } from "@/hooks/web/useI18n";
 
 const globSetting = useGlobSetting();
 const baseApiUrl = globSetting.domainUrl;
+// OSS文件预览地址（如阿里云OSS域名），用于OSS模式下拼接文件访问路径
+const viewUrl = globSetting.viewUrl;
 /**
  *  获取文件服务访问路径
  * @param fileUrl 文件路径
@@ -26,10 +28,17 @@ export const getFileAccessHttpUrl = (fileUrl, prefix = 'http') => {
       //判断是否是数组格式
       let isArray = fileUrl.indexOf('[') != -1;
       if (!isArray) {
-        let prefix = `${baseApiUrl}/sys/common/static/`;
-        // 判断是否已包含前缀
-        if (!fileUrl.startsWith(prefix)) {
-          result = `${prefix}${fileUrl}`;
+        // OSS模式下优先使用viewUrl拼接，本地模式使用domainUrl + /sys/common/static/
+        if (viewUrl) {
+          // viewUrl末尾无斜杠，fileUrl可能以/开头，需要避免双斜杠
+          result = fileUrl.startsWith('/') ? `${viewUrl}${fileUrl}` : `${viewUrl}/${fileUrl}`;
+        } else {
+          let localPrefix = `${baseApiUrl}/sys/common/static/`;
+          if (!fileUrl.startsWith(localPrefix)) {
+            // 本地模式：去掉fileUrl开头的斜杠，避免双斜杠
+            let normalizedPath = fileUrl.startsWith('/') ? fileUrl.substring(1) : fileUrl;
+            result = `${localPrefix}${normalizedPath}`;
+          }
         }
       }
     }

@@ -13,7 +13,13 @@ export const columns: BasicColumn[] = [
    {
     title: '品牌logo',
     align:"center",
-    dataIndex: 'logo'
+    dataIndex: 'logo',
+    customRender: ({text}) => {
+      if(!text){
+        return text;
+      }
+      return render.renderImage({text});
+    }
    },
    {
     title: '状态',
@@ -39,7 +45,7 @@ export const formSchema: FormSchema[] = [
   {
     label: '品牌logo',
     field: 'logo',
-    component: 'Input',
+    component: 'JImageUpload',
     dynamicRules: ({model,schema}) => {
           return [
                  { required: true, message: '请输入品牌logo!'},
@@ -49,12 +55,10 @@ export const formSchema: FormSchema[] = [
   {
     label: '状态',
     field: 'status',
-    component: 'Input',
-    dynamicRules: ({model,schema}) => {
-          return [
-                 { required: true, message: '请输入状态!'},
-          ];
-     },
+    component: 'JDictSelectTag',
+    componentProps:{
+      dictCode:"dict_item_status"
+    },
   },
 	// TODO 主键隐藏字段，目前写死为ID
 	{
