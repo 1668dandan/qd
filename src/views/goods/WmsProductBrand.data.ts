@@ -24,7 +24,7 @@ export const columns: BasicColumn[] = [
    {
     title: '状态',
     align:"center",
-    dataIndex: 'status'
+    dataIndex: 'dict'
    },
 ];
 //查询数据

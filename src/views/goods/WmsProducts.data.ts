@@ -3,6 +3,11 @@ import {FormSchema} from '/@/components/Table';
 import { rules} from '/@/utils/helper/validator';
 import { render } from '/@/utils/common/renderUtils';
 import { getWeekMonthQuarterYear } from '/@/utils';
+import {list as cargoOwnerList} from './WmsCargoOwners.api'
+import {list as productCategoryList} from './WmsProductCategories.api'
+import {list as productBrandList} from './WmsProductBrand.api'
+
+
 //列表数据
 export const columns: BasicColumn[] = [
    {
@@ -11,9 +16,9 @@ export const columns: BasicColumn[] = [
     dataIndex: 'productName'
    },
    {
-    title: '货主id',
+    title: '货主',
     align:"center",
-    dataIndex: 'ownerId'
+    dataIndex: 'ownerName'
    },
    {
     title: '商品编码',
@@ -56,9 +61,9 @@ export const columns: BasicColumn[] = [
     dataIndex: 'netWeight'
    },
    {
-    title: '商品一级分类id',
+    title: '商品分类',
     align:"center",
-    dataIndex: 'categoryId'
+    dataIndex: 'categoryName'
    },
    {
     title: '包装规格',
@@ -108,7 +113,7 @@ export const columns: BasicColumn[] = [
    {
     title: '商品品牌',
     align:"center",
-    dataIndex: 'productBrand'
+    dataIndex: 'productBrandName'
    },
 ];
 //查询数据
@@ -133,12 +138,19 @@ export const formSchema: FormSchema[] = [
      },
   },
   {
-    label: '货主id',
+    label: '货主',
     field: 'ownerId',
-    component: 'Input',
+    component: 'ApiSelect',
+    componentProps: {
+      api: cargoOwnerList,
+      resultField: 'records',
+      labelField: 'ownerName',
+      valueField: 'id',
+      numberToString: true,
+    },
     dynamicRules: ({model,schema}) => {
           return [
-                 { required: true, message: '请输入货主id!'},
+                 { required: true, message: '请选择货主!'},
           ];
      },
   },
@@ -151,6 +163,9 @@ export const formSchema: FormSchema[] = [
     label: '商品条码',
     field: 'productBarcode',
     component: 'Input',
+    componentProps: {
+      disabled: true,
+    },
   },
   {
     label: '宽',
@@ -183,9 +198,16 @@ export const formSchema: FormSchema[] = [
     component: 'InputNumber',
   },
   {
-    label: '商品一级分类id',
+    label: '商品分类',
     field: 'categoryId',
-    component: 'Input',
+    component: 'ApiSelect',
+    componentProps: {
+      api: productCategoryList,
+      resultField: 'records',
+      labelField: 'categoryName',
+      valueField: 'id',
+      numberToString: true,
+    },
   },
   {
     label: '包装规格',
@@ -238,7 +260,14 @@ export const formSchema: FormSchema[] = [
   {
     label: '商品品牌',
     field: 'productBrand',
-    component: 'Input',
+    component: 'ApiSelect',
+    componentProps: {
+      api: productBrandList,
+      resultField: 'records',
+      labelField: 'name',
+      valueField: 'id',
+      numberToString: true,
+    },
   },
 	// TODO 主键隐藏字段，目前写死为ID
 	{
