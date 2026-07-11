@@ -21,7 +21,7 @@ export const columns: BasicColumn[] = [
     dataIndex: 'warehouseAttr_dictText'
    },
    {
-    title: '状态: 创建,启动,禁用',
+    title: '状态',
     align:"center",
     dataIndex: 'status_dictText'
    },
