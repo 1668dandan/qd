@@ -33,7 +33,7 @@ export const columns: BasicColumn[] = [
    {
     title: '所属仓库',
     align:"center",
-    dataIndex: 'warehouseId'
+    dataIndex: 'warehouseName'
    },
 ];
 //查询数据
